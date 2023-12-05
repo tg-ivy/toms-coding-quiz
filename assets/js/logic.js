@@ -52,5 +52,82 @@ const questions = [
 // ----------------------------------------------------------------------------------------------------
 
 
+// Declarations
 
+const startScreen = document.getElementById('start-screen');
+const startButton = document.getElementById('start');
+const timer = document.getElementById('time');
+const questionContainer = document.getElementById('questions');
+const question = document.getElementById('question-title')
+const questionChoices = document.getElementById('choices')
+
+let currentQuestionIndex = 0;
+let playerScore = 0;
+
+startButton.addEventListener('click', function() {
+    startQuiz();
+}
+);
+
+function startQuiz() {
+    startScreen.setAttribute('class', 'hide')
+    questionContainer.setAttribute('class', 'show');
+    currentQuestionIndex = 0;
+    playerScore = 0;
+    showQuestion();
+};
+
+function showQuestion() {
+    resetQuestion();
+    let currentQuestion = questions[currentQuestionIndex];
+    let questionNo = currentQuestionIndex + 1;
+    question.innerHTML = questionNo + '. ' + currentQuestion.question;
+
+
+    currentQuestion.answers.forEach(answer => {
+        const button = document.createElement('button');
+        button.textContent = answer.text;
+        button.classList.add("btn");
+        questionChoices.appendChild(button);
+        if (answer.correct) {
+            button.dataset.correct = answer.correct;
+        }
+        button.addEventListener("click", selectAnswer)
+    });
+ }
+
+
+function selectAnswer(e) {
+    const selectedBtn = e.target;
+    const isCorrect = selectedBtn.dataset.correct === "true";
+    if (isCorrect) {
+        //let correctAudio = new Audio('../sfx/correct.wav');
+        //correctAudio.play();
+        playerScore ++;
+        console.log(playerScore)
+        currentQuestionIndex ++;
+        console.log(currentQuestionIndex)
+        if (currentQuestionIndex < questions.length) {
+           showQuestion(); 
+        } else {
+            showEndScreen();
+        }
+    } else {
+        //let incorrectAudio = new Audio('../sfx/incorrect.wav');
+        //incorrectAudio.play();
+        currentQuestionIndex ++;
+        if (currentQuestionIndex < questions.length) {
+            showQuestion(); 
+         } else {
+             showEndScreen();
+         }
+    }
+}
+
+
+ function resetQuestion() {
+    while (questionChoices.firstChild) {
+        questionChoices.removeChild(questionChoices.firstChild)
+    }
+}
 
