@@ -58,14 +58,21 @@ const startScreen = document.getElementById('start-screen');
 const startButton = document.getElementById('start');
 const timer = document.getElementById('time');
 const questionContainer = document.getElementById('questions');
-const question = document.getElementById('question-title')
-const questionChoices = document.getElementById('choices')
+const question = document.getElementById('question-title');
+const questionChoices = document.getElementById('choices');
+const endScreen = document.getElementById('end-screen');
+const finalScore = document.getElementById('final-score');
+const initials = document.getElementById('initials');
+const submitButton = document.getElementById('submit');
+
+localStorage.setItem("Games", 0)
 
 let currentQuestionIndex = 0;
 let playerScore = 0;
 
 startButton.addEventListener('click', function() {
     startQuiz();
+    timer.innerHTML = startCountdown();
 }
 );
 
@@ -106,7 +113,6 @@ function selectAnswer(e) {
         playerScore ++;
         console.log(playerScore)
         currentQuestionIndex ++;
-        console.log(currentQuestionIndex)
         if (currentQuestionIndex < questions.length) {
            showQuestion(); 
         } else {
@@ -117,10 +123,10 @@ function selectAnswer(e) {
         //incorrectAudio.play();
         currentQuestionIndex ++;
         if (currentQuestionIndex < questions.length) {
-            showQuestion(); 
-         } else {
-             showEndScreen();
-         }
+           showQuestion(); 
+        } else {
+            showEndScreen();
+        }
     }
 }
 
@@ -130,4 +136,32 @@ function selectAnswer(e) {
         questionChoices.removeChild(questionChoices.firstChild)
     }
 }
+
+function showEndScreen() {
+    questionContainer.setAttribute('class', 'hide');
+    endScreen.setAttribute('class', 'show');
+    finalScore.textContent = playerScore;
+    submitButton.addEventListener('click', submitScore);
+}
+
+
+function submitScore() {
+    localStorage.setItem("Name", initials.value);
+    localStorage.setItem("Score", playerScore);
+    console.log('HELLO')
+}
+
+function startCountdown(seconds) {
+    let counter = seconds;
+      
+    const interval = setInterval(() => {
+      console.log(counter);
+      counter--;
+        
+      if (counter < 0 ) {
+        clearInterval(interval);
+        console.log('Ding!');
+      }
+    }, 1000);
+  }
 
